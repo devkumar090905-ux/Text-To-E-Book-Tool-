@@ -1,0 +1,7 @@
+fpdf2
+markdown
+python-docx
+fastapi
+uvicorn
+python-multipart
+uharfbuzz

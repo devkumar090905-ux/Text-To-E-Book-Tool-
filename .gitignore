@@ -1,0 +1,15 @@
+venv/
+env/
+.env
+__pycache__/
+*.pyc
+temp_outputs/
+temp_uploads/
+
+frontend/node_modules/
+node_modules/
+frontend/dist/
+
+# generated files
+*.pdf
+*.json
