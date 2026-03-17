@@ -39,12 +39,14 @@ def main():
     
     # Add content and generate
     if is_structured:
-        engine.generate_full_book(content, output_file)
+        engine.generate_full_book(content)
     else:
         # For markdown, we'll just use the old method for now or convert it
         engine.add_text(content)
-        engine.add_toc()
-        IOHandler.save_pdf(engine.get_pdf(), output_file)
+    
+    # Add Index (TOC) before saving
+    engine.add_toc()
+    IOHandler.save_pdf(engine.get_pdf(), output_file, toc_pages_count=engine.toc_pages_count)
 
 if __name__ == "__main__":
     main()
