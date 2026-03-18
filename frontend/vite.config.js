@@ -8,10 +8,7 @@ export default defineConfig({
     strictPort: true,
     host: '0.0.0.0',
     allowedHosts: [
-      'simperingly-rhombohedral-luke.ngrok-free.dev',
-      '.ngrok-free.dev',
-      'localhost',
-      '0.0.0.0'
+      'simperingly-rhombohedral-luke.ngrok-free.dev'
     ],
     proxy: {
       '/api': {

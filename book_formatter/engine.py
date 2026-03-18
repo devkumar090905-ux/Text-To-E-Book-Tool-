@@ -6,8 +6,11 @@ class FormatterEngine:
     def __init__(self, style: BookStyle):
         self.style = style
         # Initialize PDF with custom book format (e.g. 6x9 inches in mm)
-        self._init_pdf()
+        self.pdf = None # Initialized in _init_pdf
         self.chapters = []
+        self.toc_pages_count = 0
+        self.page_no_offset = 0
+        self._init_pdf()
 
     def _init_pdf(self):
         # Always enable text_shaping=True for Hindi/Complex scripts
@@ -62,10 +65,10 @@ class FormatterEngine:
         self.chapters.append((title, 1, self.pdf.page_no()))
         self._apply_h1_style()
         eff_w = self.pdf.w - self.pdf.l_margin - self.pdf.r_margin
-        # Center title and add significant space
-        self.pdf.ln(20)
-        self.pdf.multi_cell(eff_w, 15, title, align='C')
-        self.pdf.ln(15)
+        # Center title and add moderate space
+        self.pdf.ln(10)
+        self.pdf.multi_cell(eff_w, 12, title, align='C')
+        self.pdf.ln(10)
         self._apply_body_style()
 
     def add_section_title(self, title):
@@ -77,11 +80,37 @@ class FormatterEngine:
         self._apply_h2_style()
         eff_w = self.pdf.w - self.pdf.l_margin - self.pdf.r_margin
         self.pdf.ln(5)
-        self.pdf.multi_cell(eff_w, 12, title, align='L')
+        self.pdf.multi_cell(eff_w, 10, title, align='L')
         self.pdf.ln(5)
         self._apply_body_style()
 
-    def generate_full_book(self, content_list, output_path):
+    def add_sub_section_title(self, title):
+        # Level 3 headings
+        if self.pdf.y > self.pdf.h - 30:
+            self.pdf.add_page()
+            
+        self.chapters.append((title, 3, self.pdf.page_no()))
+        self.pdf.set_font(self.style.font_name, 'B', self.style.h2_font_size - 3) # Smaller than H2
+        eff_w = self.pdf.w - self.pdf.l_margin - self.pdf.r_margin
+        self.pdf.ln(3)
+        self.pdf.multi_cell(eff_w, 7, title, align='L')
+        self.pdf.ln(2)
+        self._apply_body_style()
+
+    def add_list_item_title(self, title):
+        # Level 4 items (List bullets)
+        if self.pdf.y > self.pdf.h - 20:
+            self.pdf.add_page()
+            
+        self.chapters.append((title, 4, self.pdf.page_no()))
+        self.pdf.set_font(self.style.font_name, '', self.style.body_font_size - 1)
+        eff_w = self.pdf.w - self.pdf.l_margin - self.pdf.r_margin
+        # Don't add much space for list items in the main text, just write them
+        self.pdf.multi_cell(eff_w, 6, f"• {title}", align='L')
+        self.pdf.ln(1)
+        self._apply_body_style()
+
+    def generate_full_book(self, content_list):
         """Single-pass robust generation with professional styles."""
         print(f"DEBUG: Generating premium book. Items: {len(content_list)}")
         
@@ -100,6 +129,12 @@ class FormatterEngine:
                 elif 'heading 2' in style:
                     clean_section = text.replace('**', '').replace('*', '')
                     self.add_section_title(clean_section)
+                elif 'heading 3' in style:
+                    clean_sub = text.replace('**', '').replace('*', '')
+                    self.add_sub_section_title(clean_sub)
+                elif 'heading 4' in style:
+                    clean_list = text.replace('**', '').replace('*', '')
+                    self.add_list_item_title(clean_list)
                 else:
                     self._apply_body_style()
                     self._write_styled_line(text, self.style.body_line_height, self.style.body_align)
@@ -107,16 +142,80 @@ class FormatterEngine:
                 print(f"CRITICAL ERROR at item {i}: {e}")
                 raise e
 
-        # Final output
-        self.pdf.output(output_path)
-        print(f"PREMIUM PDF GENERATED: {output_path}")
 
     def add_page_numbers(self):
         def footer():
             self.pdf.set_y(-15)
             self.pdf.set_font(self.style.font_name, '', 10)
-            self.pdf.cell(0, 10, f"- {self.pdf.page_no()} -", align='C')
+            # Use current page_no plus our offset for display
+            display_num = self.pdf.page_no() + self.page_no_offset
+            self.pdf.cell(0, 10, f"- {display_num} -", align='C')
         self.pdf.footer = footer
+
+    def add_toc(self):
+        """Generates Index. If we are in 'index only' mode (or if preferred), 
+        resets its display page numbers to start from 1."""
+        if not self.chapters:
+            return
+
+        # 1. Reset page numbering for TOC pages so they start from 1
+        # Current page_no() will be the last page of content.
+        # The first TOC page will be page_no() + 1.
+        # We want (page_no() + 1) + offset = 1  => offset = -page_no()
+        self.page_no_offset = -self.pdf.page_no()
+
+        # Record where TOC starts
+        start_toc_page = self.pdf.page_no() + 1
+        
+        # Add a new page for Index
+        self.pdf.add_page()
+        style_font = self.style.font_name
+        
+        # Header "Contents" - Centered, Bold
+        self.pdf.set_font(style_font, 'B', 24)
+        eff_w = self.pdf.w - self.pdf.l_margin - self.pdf.r_margin
+        
+        self.pdf.ln(10)
+        # Change title to "Contents" to match reference
+        self.pdf.multi_cell(eff_w, 15, "Contents", align='C', ln=1)
+        self.pdf.ln(10) # More space, no horizontal line as per reference
+
+        # Print TOC items with bullets
+        for title, level, page_number in self.chapters:
+            clean_title = str(title).replace('**', '').replace('*', '').strip()
+            if not clean_title: continue
+
+            if level == 1:
+                # Chapter level: Bold, Left-aligned, no bullet
+                self.pdf.set_font(style_font, 'B', 11) # Reduced further
+                self.pdf.ln(3)
+                self.pdf.multi_cell(eff_w, 5, clean_title)
+                self.pdf.ln(1)
+            elif level == 2:
+                # Section level
+                self.pdf.set_font(style_font, 'B', 10) 
+                self.pdf.set_x(self.pdf.l_margin + 4)
+                self.pdf.cell(5, 4, "■ ")
+                self.pdf.multi_cell(eff_w - 9, 4, clean_title, align='L')
+            elif level == 3:
+                # Subsection level (Level 3): Further indented, empty circle bullet
+                self.pdf.set_font(style_font, '', 9)
+                self.pdf.set_x(self.pdf.l_margin + 8)
+                self.pdf.cell(5, 4, "◦ ")
+                self.pdf.multi_cell(eff_w - 13, 4, clean_title, align='L')
+            else:
+                # Level 4 (Lists): Primary bullet points under chapters
+                self.pdf.set_font(style_font, '', 9.5)
+                self.pdf.set_x(self.pdf.l_margin + 4)
+                self.pdf.cell(5, 4, "• ")
+                self.pdf.multi_cell(eff_w - 9, 4, clean_title, align='L')
+
+
+        # Record how many pages the TOC uses
+        self.toc_pages_count = self.pdf.page_no() - start_toc_page + 1
+        print(f"DEBUG: Index generated. Pages: {self.toc_pages_count}")
+        # Note: We NO LONGER call move_page here because it's missing in some fpdf2 environments.
+        # Instead, we will handle reordering in IOHandler using pypdf.
 
     def add_text(self, text):
         """Standard markdown processing if needed."""

@@ -163,3 +163,30 @@ button.primary-btn:disabled {
   align-items: center;
   gap: 12px;
 }
+
+button.secondary-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: white;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+button.secondary-btn:hover:not(:disabled) {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+button.secondary-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

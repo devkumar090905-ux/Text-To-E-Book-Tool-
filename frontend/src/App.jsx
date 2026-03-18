@@ -15,7 +15,7 @@ function App() {
     }
   };
 
-  const handleFormat = async () => {
+  const handleFormat = async (mode = 'full') => {
     if (!file) return;
 
     setStatus('processing');
@@ -25,6 +25,7 @@ function App() {
     formData.append('file', file);
     formData.append('font_size', fontSize);
     formData.append('margin', margin);
+    formData.append('mode', mode);
 
     const apiUrl = '/api/format';
 
@@ -39,7 +40,8 @@ function App() {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `formatted_${file.name.split('.')[0]}.pdf`;
+        const prefix = mode === 'index' ? 'index_' : 'formatted_';
+        a.download = `${prefix}${file.name.split('.')[0]}.pdf`;
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
@@ -101,7 +103,7 @@ function App() {
                 className="status-card"
               >
                 <CheckCircle size={20} />
-                Successfully formatted! Downloading PDF...
+                Successfully generated! Downloading PDF...
               </motion.div>
             )}
             {status === 'error' && (
@@ -151,23 +153,34 @@ function App() {
             />
           </div>
 
-          <button 
-            className="primary-btn" 
-            disabled={!file || status === 'processing'}
-            onClick={handleFormat}
-          >
-            {status === 'processing' ? (
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                <Loader2 className="spinner" size={20} />
-                Processing...
-              </div>
-            ) : (
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                <Download size={20} />
-                Generate & Download PDF
-              </div>
-            )}
-          </button>
+          <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
+            <button 
+              className="primary-btn" 
+              disabled={!file || status === 'processing'}
+              onClick={() => handleFormat('full')}
+            >
+              {status === 'processing' ? (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  <Loader2 className="spinner" size={20} />
+                  Processing PDF...
+                </div>
+              ) : (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  <Download size={20} />
+                  Generate & Download PDF
+                </div>
+              )}
+            </button>
+
+            <button 
+              className="secondary-btn" 
+              disabled={!file || status === 'processing'}
+              onClick={() => handleFormat('index')}
+            >
+               <FileText size={20} color="#8b5cf6" />
+               Generate Book Index
+            </button>
+          </div>
         </section>
       </main>
 

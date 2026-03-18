@@ -64,25 +64,43 @@ class IOHandler:
                     detected_style = "heading 1"
                 elif "heading 2" in style_name or style_name == "h2":
                     detected_style = "heading 2"
+                elif "heading 3" in style_name or style_name == "h3":
+                    detected_style = "heading 3"
+                elif "list" in style_name or "bullet" in style_name or "paragraph" in style_name and para.text.strip().startswith(('•', '-', '*', '1.', '2.')):
+                    # Treat bulleted lists as level 4 items for the index
+                    detected_style = "heading 4"
+                elif "list paragraph" in style_name:
+                    # Very common in modern Word for bullets
+                    detected_style = "heading 4"
                 elif "heading" in style_name:
                     detected_style = "heading 2"
                 
-                # B. Keyword check (Hindi)
+                # B. Keyword check (Hindi & English)
                 text_clean = para.text.strip()
-                keywords_h1 = ["अध्याय", "विषय-सूची"]
-                keywords_h2 = ["निष्कर्ष", "सारांश", "भूमिका", "परिचय", "धन्यवाद"]
+                keywords_h1 = ["अध्याय", "विषय-सूची", "Adhyay", "Chapter", "Index"]
+                keywords_h2 = ["निष्कर्ष", "सारांश", "भूमिका", "परिचय", "धन्यवाद", "Introduction", "Summary", "Conclusion"]
                 
-                if any(text_clean.startswith(k) for k in keywords_h1):
+                # Check for chapter prefix
+                if any(text_clean.lower().startswith(k.lower()) for k in keywords_h1):
                     detected_style = "heading 1"
-                elif any(text_clean.startswith(k) for k in keywords_h2):
+                elif any(text_clean.lower().startswith(k.lower()) for k in keywords_h2):
                     detected_style = "heading 2"
                 
                 # C. Heuristics (Size or Full Bold)
                 if detected_style == "normal":
-                    if max_font_size > 18:
+                    if max_font_size > 17:
                         detected_style = "heading 1"
-                    elif max_font_size > 15 or (all_bold and len(text_clean) < 100):
+                    elif max_font_size > 13: 
                         detected_style = "heading 2"
+                    elif (all_bold and len(text_clean) < 150) or max_font_size >= 12:
+                        # If it's short, bold, or slightly larger than normal (12pt), assume it's a subtitle
+                        detected_style = "heading 3"
+                    elif text_clean.startswith('•') or text_clean.startswith('-'):
+                        # Manual bullet detection
+                        detected_style = "heading 4"
+                    elif 0 < len(text_clean) < 100 and not text_clean.endswith(('।', '.', '?', '!', ':', ';', ',')):
+                        # Heuristic: Short phrase without ending punctuation is likely a list item / subtitle
+                        detected_style = "heading 4"
 
                 content.append({
                     "text": text_with_markers,
@@ -92,6 +110,35 @@ class IOHandler:
         return content
 
     @staticmethod
-    def save_pdf(pdf, output_path):
+    def save_pdf(pdf, output_path, toc_pages_count=0, extract_index_only=False):
+        # First save to a temporary location or keep in memory
         pdf.output(output_path)
+        
+        if toc_pages_count > 0:
+            try:
+                from pypdf import PdfReader, PdfWriter
+                reader = PdfReader(output_path)
+                writer = PdfWriter()
+                
+                num_pages = len(reader.pages)
+                # TOC is at the end: from (num_pages - toc_pages_count) to (num_pages - 1)
+                toc_indices = list(range(num_pages - toc_pages_count, num_pages))
+                
+                if extract_index_only:
+                    # Only keep the Index pages
+                    for i in toc_indices:
+                        writer.add_page(reader.pages[i])
+                    print(f"Extracted Index successfully ({toc_pages_count} pages).")
+                else:
+                    # Move Index to front: TOC first, then content
+                    content_indices = list(range(0, num_pages - toc_pages_count))
+                    for i in toc_indices + content_indices:
+                        writer.add_page(reader.pages[i])
+                    print(f"Index moved to front successfully ({toc_pages_count} pages).")
+                
+                with open(output_path, "wb") as f:
+                    writer.write(f)
+            except Exception as e:
+                print(f"Warning: Could handle Index pages: {e}")
+
         print(f"Book saved successfully to: {output_path}")

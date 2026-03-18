@@ -1,0 +1,68 @@
+P0 [Normal] (Size: 23.0, Bold: True): 📘 उड़ने की इजाज़त मत माँगो
+P1 [Normal] (Size: 17.0, Bold: True): पंख तुम्हारे हैं और आसमान किसी एक का नहीं
+P2 [Normal] (Size: 13.0, Bold: True): (LGBTQ सशक्तिकरण, स्वीकृति और नेतृत्व की यात्रा)
+P4 [Normal] (Size: 13.0, Bold: True): अध्याय 1 – “मैं अलग हूँ” से “मैं पर्याप्त हूँ” तक
+P5 [Normal] (Size: Unknown, Bold: None): आत्म-संदेह की शुरुआत
+P6 [Normal] (Size: Unknown, Bold: None): समाज के लेबल
+P7 [Normal] (Size: Unknown, Bold: None): आंतरिक संघर्ष
+P8 [Normal] (Size: Unknown, Bold: None): शर्म से सम्मान तक
+P9 [Normal] (Size: Unknown, Bold: None): वास्तविक LGBTQIA+ अनुभव
+P10 [Normal] (Size: 13.0, Bold: True): अध्याय 2 – छुपी हुई पहचान का दर्द
+P11 [Normal] (Size: Unknown, Bold: None): दोहरी ज़िंदगी
+P12 [Normal] (Size: Unknown, Bold: None): परिवार का डर
+P13 [Normal] (Size: Unknown, Bold: None): सार्वजनिक बनाम निजी व्यक्तित्व
+P14 [Normal] (Size: Unknown, Bold: None): मानसिक स्वास्थ्य प्रभाव
+P15 [Normal] (Size: 13.0, Bold: True): अध्याय 3 – कमिंग आउट: डर या मुक्ति?
+P16 [Normal] (Size: Unknown, Bold: None): सही समय चुनना
+P17 [Normal] (Size: Unknown, Bold: None): सुरक्षित रणनीति
+P18 [Normal] (Size: Unknown, Bold: None): परिवार की प्रतिक्रिया
+P19 [Normal] (Size: Unknown, Bold: None): सपोर्ट सिस्टम बनाना
+P20 [Normal] (Size: 13.0, Bold: True): अध्याय 4 – आत्म-स्वीकृति की शक्ति
+P21 [Normal] (Size: Unknown, Bold: None): आंतरिक समलैंगिकता-विरोध (आत्म-अस्वीकृति)     (Internalized Homophobia)
+P22 [Normal] (Size: Unknown, Bold: True): शर्म और अपराधबोध           (Shame और Guilt)
+P23 [Normal] (Size: Unknown, Bold: None): चिंता और अवसाद                (Anxiety और Depression)
+P24 [Normal] (Size: Unknown, Bold: None): आत्म-स्वीकृति के अभ्यास      (self-acceptance practices)
+P25 [Normal] (Size: Unknown, Bold: None): आत्म-प्रेम
+P26 [Normal] (Size: Unknown, Bold: None): उपचार और आत्म-चिकित्सा की यात्रा  (healing journey)
+P28 [Normal] (Size: 13.0, Bold: True): अध्याय 5 – समाज की दीवारें
+P29 [Normal] (Size: Unknown, Bold: None): सांस्कृतिक प्रतिरोध
+P30 [Normal] (Size: Unknown, Bold: None): धार्मिक तर्क
+P31 [Normal] (Size: Unknown, Bold: None): रूढ़िवादी सोच
+P33 [Normal] (Size: 13.0, Bold: True): अध्याय 6 – कानून और गरिमा
+P34 [Normal] (Size: Unknown, Bold: None): Section 377 का अंत
+P35 [Normal] (Size: Unknown, Bold: None): Supreme Court of India का 2018 निर्णय
+P36 [Normal] (Size: Unknown, Bold: None): गरिमा और निजता का अधिकार
+P37 [Normal] (Size: Unknown, Bold: None): वर्तमान कानूनी चुनौतियाँ
+P38 [Normal] (Size: 13.0, Bold: True): अध्याय 7 – ट्रांस अधिकार और वास्तविकता
+P39 [Normal] (Size: Unknown, Bold: None): ट्रांसजेंडर व्यक्तियों (अधिकारों का संरक्षण) अधिनियम, 2019 Transgender Persons (Protection of Rights) Act
+P40 [Normal] (Size: Unknown, Bold: None): पहचान प्रमाणन की जटिलता
+P41 [Normal] (Size: Unknown, Bold: None): रोजगार और शिक्षा चुनौतियाँ
+P42 [Normal] (Size: Unknown, Bold: None): सुधार की ज़रूरत
+P43 [Normal] (Size: 13.0, Bold: True): अध्याय 8 – मानसिक स्वास्थ्य की सुरक्षा
+P44 [Normal] (Size: Unknown, Bold: None): डिप्रेशन और एंग्जायटी
+P45 [Normal] (Size: Unknown, Bold: None): आत्महत्या का जोखिम
+P46 [Normal] (Size: Unknown, Bold: None): काउंसलिंग
+P47 [Normal] (Size: Unknown, Bold: None): सुरक्षित स्थान   (safe spaces)
+P50 [Normal] (Size: 13.0, Bold: True): अध्याय 9 –  समुदाय प्रेम और रिश्ते की शक्ति
+P51 [Normal] (Size: Unknown, Bold: None): समान संबंध
+P52 [Normal] (Size: Unknown, Bold: None): सामाजिक दबाव
+P53 [Normal] (Size: Unknown, Bold: None): दीर्घकालिक प्रतिबद्धता
+P54 [Normal] (Size: Unknown, Bold: None): विवाह समानता बहस
+P55 [Normal] (Size: Unknown, Bold: None): Pride movement
+P56 [Normal] (Size: Unknown, Bold: None): support groups
+P57 [Normal] (Size: Unknown, Bold: None): डिजिटल activism
+P58 [Normal] (Size: 13.0, Bold: True): अपनी कहानी की ताकत
+P59 [Normal] (Size: Unknown, Bold: None): personal storytelling
+P60 [Normal] (Size: Unknown, Bold: None): shame to strength
+P61 [Normal] (Size: Unknown, Bold: None): सार्वजनिक बोलना
+P64 [Normal] (Size: 13.0, Bold: True): अध्याय 10. रोल मॉडल, मीडिया और नैरेटिव बदलना
+P65 [Normal] (Size: Unknown, Bold: None): कला, खेल, राजनीति में LGBTQIA+ चेहरे
+P66 [Normal] (Size: Unknown, Bold: None): visibility की ताकत
+P67 [Normal] (Size: Unknown, Bold: None): फिल्मों की भूमिका
+P68 [Normal] (Size: Unknown, Bold: None): OTT और representation
+P69 [Normal] (Size: Unknown, Bold: None): सोशल मीडिया अभियान
+P71 [Normal] (Size: 13.0, Bold: True): अध्याय 11.– अंतिम संदेश: इजाज़त मत माँगो
+P72 [Normal] (Size: Unknown, Bold: None): अपनी जगह खुद बनाओ
+P73 [Normal] (Size: Unknown, Bold: None): अपनी पहचान पर गर्व करो
+P74 [Normal] (Size: Unknown, Bold: None): डर से आज़ादी
+P75 [Normal] (Size: Unknown, Bold: None): आसमान साझा है

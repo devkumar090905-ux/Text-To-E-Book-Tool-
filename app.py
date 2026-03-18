@@ -31,13 +31,15 @@ async def format_book(
     font_size: int = Form(12),
     font_name: str = Form("Inter"),
     margin: int = Form(25),
-    line_spacing: float = Form(1.5)
+    line_spacing: float = Form(1.5),
+    mode: str = Form("full") # "full" or "index"
 ):
     # 1. Save uploaded file
     file_id = str(uuid.uuid4())
     ext = os.path.splitext(file.filename)[1]
     input_path = os.path.join(UPLOAD_DIR, f"{file_id}{ext}")
-    output_path = os.path.join(OUTPUT_DIR, f"formatted_{file_id}.pdf")
+    output_prefix = "index_" if mode == "index" else "formatted_"
+    output_path = os.path.join(OUTPUT_DIR, f"{output_prefix}{file_id}.pdf")
 
     try:
         with open(input_path, "wb") as buffer:
@@ -64,17 +66,25 @@ async def format_book(
 
         # 4. Generate PDF
         if is_structured:
-            engine.generate_full_book(content, output_path)
+            engine.generate_full_book(content)
         else:
             engine.add_text(content)
-            IOHandler.save_pdf(engine.get_pdf(), output_path)
+            
+        # Add indexing (TOC) before final save
+        engine.add_toc()
+        IOHandler.save_pdf(
+            engine.get_pdf(), 
+            output_path, 
+            toc_pages_count=engine.toc_pages_count, 
+            extract_index_only=(mode == "index")
+        )
 
         # 5. Return PDF
         if os.path.exists(output_path):
             return FileResponse(
                 output_path, 
                 media_type="application/pdf", 
-                filename=f"formatted_{file.filename.split('.')[0]}.pdf"
+                filename=f"{output_prefix}{file.filename.split('.')[0]}.pdf"
             )
         else:
             raise HTTPException(status_code=500, detail="PDF generation failed")
@@ -89,6 +99,7 @@ async def format_book(
 @app.get("/")
 async def root():
     return {"message": "Book Formatter API is running"}
+
 
 if __name__ == "__main__":
     import uvicorn
